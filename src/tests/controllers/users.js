@@ -14,7 +14,7 @@ chai.use(chaiHttp);
 describe('User Controller', () => {
 
   describe('/GET users', () => {
-    it('it should GET all the users', (done) => {
+    it('should GET all the users', (done) => {
         chai.request(app)
             .get('/users')
             .end((err, res) => {
@@ -25,6 +25,60 @@ describe('User Controller', () => {
             });
       });
   });
- after(() => mongoose.connection.close());
-  
+
+  describe('/POST users', () => {
+    it('register users', (done) => {
+        chai.request(app)
+            .post('/users')
+            .send({
+                email: "tesla@gmail.com",
+                firstName: "niko",
+                password: "secretpass",
+                bornAt: "1993-04-28T21:50:54.181Z",
+              })
+            .end((err, res) => {
+                res.should.have.status(httpStatus.CREATED);
+                res.body.should.be.a('object');
+                res.body.should.have.property('id');
+                res.body.should.have.property('age');
+                res.body.should.have.property('email');
+                res.body.should.have.property('firstName');
+                res.body.firstName.should.be.equal('niko');
+                res.body.email.should.be.equal('tesla@gmail.com');
+              done();
+            });
+      });
+
+    it('reject repeated email address', (done) => {
+        chai.request(app)
+            .post('/users')
+            .send({
+                email: "tesla@gmail.com",
+                firstName: "niko",
+                password: "secretpass",
+              })
+            .end((err, res) => {
+                res.should.have.status(httpStatus.BAD_REQUEST);
+              done();
+            });
+      });
+
+    it('not return the password', (done) => {
+        chai.request(app)
+            .post('/users')
+            .send({
+                email: "tesla2@gmail.com",
+                firstName: "niko",
+                password: "secretpass",
+              })
+            .end((err, res) => {
+                res.should.have.status(httpStatus.CREATED);
+                res.body.should.be.a('object');
+                res.body.should.not.have.property('password');
+              done();
+            });
+      });
+  });
+
+
 });

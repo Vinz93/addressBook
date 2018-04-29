@@ -45,7 +45,7 @@ const UserController = {
       offset,
       limit,
     });
-    res.json(users);
+    res.status(httpStatus.OK).json(users);
   },
 
   /**
@@ -82,7 +82,7 @@ const UserController = {
    */
   async create(req, res) {
     const newUser = await User.create(req.body);
-    return res.json(newUser);
+    return res.status(httpStatus.CREATED).json(newUser);
   },
 
   /**
@@ -184,7 +184,7 @@ const UserController = {
    */
 
   readByMe(req, res) {
-    return res.json(res.locals.user);
+    return res.status(httpStatus.OK).json(res.locals.user);
   },
 
 };
