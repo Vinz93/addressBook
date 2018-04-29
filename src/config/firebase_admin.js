@@ -1,5 +1,5 @@
-// import * as admin from 'firebase-admin';
-const admin = require('firebase-admin');
+import * as admin from 'firebase-admin';
+// const admin = require('firebase-admin');
 // Initialize the app with a service account, granting admin privileges
 admin.initializeApp({
   credential: admin.credential.cert({
