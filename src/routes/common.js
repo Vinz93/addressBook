@@ -24,4 +24,6 @@ router.route('/users/login')
 router.route('/users/me')
   .get(validate(userValidator.readByMe), catchErrors(User.validate), User.readByMe);
 
+router.route('/users/contacts')
+  .post(validate(userValidator.addContact), catchErrors(User.validate), User.addContact);
 export default router;

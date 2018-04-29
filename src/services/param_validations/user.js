@@ -43,4 +43,15 @@ export default {
       authorization: Joi.string().required(),
     },
   },
+  addContact: {
+    body: {
+      email: Joi.string().email(),
+      name: Joi.string(),
+      address: Joi.string(),
+      phoneNumber: Joi.string(),
+    },
+    headers: {
+      authorization: Joi.string().required(),
+    },
+  },
 };

@@ -4,6 +4,7 @@ import moment from 'moment';
 import { paginate } from '../helpers/utils';
 import { APIError } from '../helpers/errors';
 import config from '../config/env';
+import db from '../config/firebase_admin';
 import { createJwt, verifyJwt } from '../services/jwt';
 import User from '../models/user';
 
@@ -192,6 +193,54 @@ const UserController = {
 
   readByMe(req, res) {
     return res.status(httpStatus.OK).json(res.locals.user);
+  },
+
+    /**
+   * @swagger
+   * /users/contacts:
+   *   post:
+   *     tags:
+   *      - User
+   *     description: Add a new contact to your contact's list
+   *     produces:
+   *       - application/json
+   *     parameters:
+   *       - name: email
+   *         description: contact's email.
+   *         in: formData
+   *         type: string
+   *       - name: name
+   *         description: contact's name.
+   *         in: formData
+   *         type: string
+   *       - name: address
+   *         description: contact's address.
+   *         in: formData
+   *         type: string
+   *       - name: phoneNumber
+   *         description: contact's phone number.
+   *         in: formData
+   *         type: string
+   *       - name: Authorization
+   *         description: jwt.
+   *         in: header
+   *         required: true
+   *         type: string
+   *     responses:
+   *       200:
+   *         description: returns user token'
+   */
+
+  addContact(req, res) {
+    const { id } = res.locals.user;
+    const userRef = db.ref("contacs").child(id);
+    userRef.push(req.body, (err) => {
+      if (err) {
+        throw new APIError('Firebase problem', httpStatus.INTERNAL_SERVER_ERROR);
+      } else {
+        return res.status(httpStatus.CREATED).end();
+      }
+    });
   },
 
 };
