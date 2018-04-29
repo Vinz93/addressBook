@@ -13,7 +13,7 @@ chai.use(chaiHttp);
 
 describe('User Controller', () => {
 
-  describe('/GET users', () => {
+  describe('GET /users', () => {
     it('should GET all the users', (done) => {
         chai.request(app)
             .get('/users')
@@ -26,7 +26,7 @@ describe('User Controller', () => {
       });
   });
 
-  describe('/POST users', () => {
+  describe('POST /users', () => {
     it('register users', (done) => {
         chai.request(app)
             .post('/users')
@@ -63,6 +63,21 @@ describe('User Controller', () => {
             });
       });
 
+    it('reject Unknown Body properties', (done) => {
+        chai.request(app)
+            .post('/users')
+            .send({
+                email: "tyrell@gmail.com",
+                firstName: "tyrell",
+                password: "fsociety",
+                weirdProp: 'sudo rm -rf /',
+              })
+            .end((err, res) => {
+                res.should.have.status(httpStatus.BAD_REQUEST);
+              done();
+            });
+      });
+
     it('not return the password', (done) => {
         chai.request(app)
             .post('/users')
@@ -80,5 +95,45 @@ describe('User Controller', () => {
       });
   });
 
+  describe('POST /users/login', () => {
+    it('users can log in with email and password', (done) => {
+        chai.request(app)
+            .post('/users/login')
+            .send({
+                email: "tesla2@gmail.com",
+                password: "secretpass",
+            })
+            .end((err, res) => {
+                res.should.have.status(httpStatus.OK);
+                res.body.should.be.a('object');
+                res.body.should.have.property('token');                
+              done();
+            });
+      });
+    it('reject wrong password', (done) => {
+        chai.request(app)
+            .post('/users/login')
+            .send({
+                email: "tesla2@gmail.com",
+                password: "notmypass",
+            })
+            .end((err, res) => {
+                res.should.have.status(httpStatus.BAD_REQUEST);
+              done();
+            });
+    });
+    it('handle not registered users', (done) => {
+        chai.request(app)
+            .post('/users/login')
+            .send({
+                email: "whoami@gmail.com",
+                password: "itsmypassiguess",
+            })
+            .end((err, res) => {
+                res.should.have.status(httpStatus.NOT_FOUND);
+              done();
+            });
+      });
+   });
 
 });
