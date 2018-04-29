@@ -1,7 +1,9 @@
 import httpStatus from 'http-status';
+import moment from 'moment';
 
 import { paginate } from '../helpers/utils';
 import { APIError } from '../helpers/errors';
+import config from '../config/env';
 import { createJwt, verifyJwt } from '../services/jwt';
 import User from '../models/user';
 
@@ -155,9 +157,14 @@ const UserController = {
   },
 
   async validate(req, res, next) {
+    const { expTime } = config.constants;
     const token = req.get('Authorization');
-    const { id } = await verifyJwt(token);
+    const { id, date } = await verifyJwt(token);
     const user = await User.findById(id);
+    const expirationtime = moment(date).add(expTime, 'hours');
+    if (expirationtime < Date.now()) {
+      throw new APIError('Token expired', httpStatus.BAD_REQUEST);
+    }
     if (!user) throw new APIError('User not found', httpStatus.UNAUTHORIZED);
     res.locals.user = user;
     next();

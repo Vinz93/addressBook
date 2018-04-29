@@ -14,3 +14,7 @@ export const appConfig = {
   root: path.join(__dirname, '../../../'),
 };
 
+export const constants = {
+  expTime: 1,
+};
+
