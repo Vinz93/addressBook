@@ -3,8 +3,13 @@ import chai from 'chai';
 import chaiHttp from 'chai-http';
 import httpStatus from 'http-status';
 import mongoose from 'mongoose';
+
+import config from '../../config/env';
 import User from '../../models/user';
 import app from '../../index';
+
+const { path, basePath } = config.appConfig;
+const baseURL = `${basePath}${path}`;
 
 mongoose.Promise = Promise;
 
@@ -16,7 +21,7 @@ describe('User Controller', () => {
   describe('GET /users', () => {
     it('should GET all the users', (done) => {
         chai.request(app)
-            .get('/users')
+            .get(`${baseURL}/users`)
             .end((err, res) => {
                 res.should.have.status(httpStatus.OK);
                 res.body.should.be.a('object');
@@ -29,7 +34,7 @@ describe('User Controller', () => {
   describe('POST /users', () => {
     it('register users', (done) => {
         chai.request(app)
-            .post('/users')
+            .post(`${baseURL}/users`)
             .send({
                 email: "tesla@gmail.com",
                 firstName: "niko",
@@ -51,7 +56,7 @@ describe('User Controller', () => {
 
     it('reject repeated email address', (done) => {
         chai.request(app)
-            .post('/users')
+            .post(`${baseURL}/users`)
             .send({
                 email: "tesla@gmail.com",
                 firstName: "niko",
@@ -65,7 +70,7 @@ describe('User Controller', () => {
 
     it('reject Unknown Body properties', (done) => {
         chai.request(app)
-            .post('/users')
+            .post(`${baseURL}/users`)
             .send({
                 email: "tyrell@gmail.com",
                 firstName: "tyrell",
@@ -80,7 +85,7 @@ describe('User Controller', () => {
 
     it('not return the password', (done) => {
         chai.request(app)
-            .post('/users')
+            .post(`${baseURL}/users`)
             .send({
                 email: "tesla2@gmail.com",
                 firstName: "niko",
@@ -98,7 +103,7 @@ describe('User Controller', () => {
   describe('POST /users/login', () => {
     it('users can log in with email and password', (done) => {
         chai.request(app)
-            .post('/users/login')
+            .post(`${baseURL}/users/login`)
             .send({
                 email: "tesla2@gmail.com",
                 password: "secretpass",
@@ -112,7 +117,7 @@ describe('User Controller', () => {
       });
     it('reject wrong password', (done) => {
         chai.request(app)
-            .post('/users/login')
+            .post(`${baseURL}/users/login`)
             .send({
                 email: "tesla2@gmail.com",
                 password: "notmypass",
@@ -124,7 +129,7 @@ describe('User Controller', () => {
     });
     it('handle not registered users', (done) => {
         chai.request(app)
-            .post('/users/login')
+            .post(`${baseURL}/users/login`)
             .send({
                 email: "whoami@gmail.com",
                 password: "itsmypassiguess",

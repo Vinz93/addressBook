@@ -1,6 +1,4 @@
 import * as admin from 'firebase-admin';
-// const admin = require('firebase-admin');
-// Initialize the app with a service account, granting admin privileges
 admin.initializeApp({
   credential: admin.credential.cert({
     project_id: "strv-7a643",
@@ -12,5 +10,4 @@ admin.initializeApp({
   databaseURL: "https://strv-7a643.firebaseio.com",
 });
 
-// As an admin, the app has access to read and write all data, regardless of Security Rules
 export default admin.database();
