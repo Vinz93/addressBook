@@ -20,7 +20,7 @@ const spec = swaggerDoc({
       title: 'API',
       version: '1.0.0',
     },
-    basePath: config.appConfig.basePath,
+    basePath: `${appConfig.basePath}${appConfig.path}`,
   },
   apis: [
     `${path.resolve()}/src/models/**/*.js`,
@@ -42,7 +42,7 @@ if (config.appConfig.env === 'development' || config.appConfig.env === 'testing'
 app.use(bodyParser.json());
 app.use(cors());
 
-app.use(config.appConfig.path, routes);
+app.use(`${appConfig.basePath}${appConfig.path}`, routes);
 
 swaggerTools.initializeMiddleware(spec, (middleware) => {
   app.use(middleware.swaggerUi({
