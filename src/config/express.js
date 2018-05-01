@@ -12,6 +12,7 @@ import errorResponse from '../services/middlewares/error_response';
 import config from './env';
 import routes from '../routes';
 
+const { appConfig } = config;
 const app = express();
 const spec = swaggerDoc({
   swaggerDefinition: {
@@ -45,10 +46,10 @@ app.use(config.appConfig.path, routes);
 
 swaggerTools.initializeMiddleware(spec, (middleware) => {
   app.use(middleware.swaggerUi({
-    apiDocs: `${config.appConfig.path}docs.json`,
-    swaggerUi: `${config.appConfig.path}docs`,
-    apiDocsPrefix: config.appConfig.basePath,
-    swaggerUiPrefix: config.appConfig.basePath,
+    apiDocs: `${appConfig.basePath}${appConfig.path}/docs.json`,
+    swaggerUi: `${appConfig.basePath}${appConfig.path}/docs`,
+    apiDocsPrefix: `${appConfig.basePath}${appConfig.path}`,
+    swaggerUiPrefix: '/',
   }));
 });
 

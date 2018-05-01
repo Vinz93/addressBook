@@ -8,12 +8,13 @@ import 'babel-core/register';
 import 'babel-polyfill';
 
 mongoose.Promise = Promise;
-const { port, path, host } = config.appConfig;
+const { port, path, host, env, publicPort, basePath } = config.appConfig;
+
 
 function listen() {
   app.listen(port);
-  console.log(`💻  API started on port ${port}`);
-  console.log(`📔  Swagger on ${host}:${port}${path}docs`);
+  console.log(`💻 API ${env} started on port ${port}`);
+  console.log(`📔   Swagger on ${host}:${publicPort}${basePath}${path}/docs`);
 }
 
 function connect() {

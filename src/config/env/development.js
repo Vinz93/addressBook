@@ -7,10 +7,10 @@ export const dbConfig = {
 export const appConfig = {
   env: 'development',
   host: process.env.HOST || 'http://127.0.0.1',
-  path: '/',
-  basePath: '/',
+  path: '/v1',
+  basePath: '/api',
   port: 3000,
-  basePort: 3000,
+  publicPort: 80,
   root: path.join(__dirname, '../../../'),
 };
 
