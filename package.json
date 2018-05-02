@@ -46,7 +46,7 @@
     "crypto": "0.0.3",
     "express": "^4.13.4",
     "express-validation": "^1.0.1",
-    "firebase-admin": "5.7.0",
+    "firebase-admin": "^5.12.0",
     "http-status": "^0.2.3",
     "joi": "^9.2.0",
     "joi-objectid": "^2.0.0",
