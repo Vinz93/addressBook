@@ -5,10 +5,17 @@ node_js:
   - "iojs"
 services:
   - mongodb
+before_install:
+  - export PATH=./node_modules/.bin/:$PATH
+  - npm install node-gyp -g
 install:
   - npm install
+before_script:
+  - node-pre-gyp clean
+  - node-gyp clean
 script:
   - npm test
+  - node-pre-gyp clean
 env:
   - CXX=g++-4.8
 addons:
