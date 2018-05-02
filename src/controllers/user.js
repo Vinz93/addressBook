@@ -160,8 +160,7 @@ const UserController = {
   async validate(req, res, next) {
     const { expTime } = config.constants;
     const token = req.get('Authorization');
-    const { id, date } = await verifyJwt(token);
-    const user = await User.findById(id);
+    const { user, date } = await verifyJwt(token);
     const expirationtime = moment(date).add(expTime, 'hours');
     if (expirationtime < Date.now()) {
       throw new APIError('Token expired', httpStatus.BAD_REQUEST);

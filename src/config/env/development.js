@@ -16,5 +16,6 @@ export const appConfig = {
 
 export const constants = {
   expTime: 1,
+  jwtKey: 'Fsociety.dat',
 };
 
