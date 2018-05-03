@@ -10,12 +10,11 @@ let should = chai.should();
 
 describe('User Model', () => {
   before(done => {
-    // const connection = mongoose.connect('mongodb://localhost:27017/strv_test');
     User.remove({})
       .then(() => {
         User.create({
           email: 'unique@gmail.com',
-          firstName: 'Sr. Tester',
+          firstName: 'Elliot',
           password: 'secret',
         })
         .then(() => done());
@@ -23,7 +22,6 @@ describe('User Model', () => {
       .catch(err => console.log(err));
   });
 
-  // after(() => mongoose.connection.close());
 
 
   describe('fields and virtuals', () => {

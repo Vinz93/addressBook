@@ -1,11 +1,11 @@
 import path from 'path';
 
 export const dbConfig = {
-  db: 'mongodb://localhost/strv',
+  db: 'mongodb://localhost/strv-testing',
 };
 
 export const appConfig = {
-  env: 'development',
+  env: 'testing',
   host: process.env.HOST || 'http://127.0.0.1',
   path: '/v1',
   basePath: '/api',

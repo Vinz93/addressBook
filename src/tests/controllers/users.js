@@ -141,4 +141,63 @@ describe('User Controller', () => {
       });
    });
 
+   describe('POST /users/contacts', () => {
+    before(done => {
+        User.remove({})
+          .then(() => {
+            User.create({
+              email: 'unique@gmail.com',
+              firstName: 'Elliot',
+              password: 'secret',
+            })
+            .then(() => done());
+          })
+          .catch(err => console.log(err));
+      });
+
+    it('Can add users to the addresBook', (done) => {
+        chai.request(app)
+            .post(`${baseURL}/users/login`)
+            .send({
+                email: "unique@gmail.com",
+                password: "secret",
+            })
+            .end((err, res) => {
+                chai.request(app)
+                .post(`${baseURL}/users/contacts`)
+                .set('Authorization', res.body.token)
+                .send({
+                    email: "newcontact@gmail.com",
+                    name: "jhon",
+                    phoneNumber: "+1 989898",
+                }).end((err, res) => {
+                    res.should.have.status(httpStatus.CREATED);              
+                  done();
+                });
+            })
+      });
+    it('reject Unknown Body properties', (done) => {
+        chai.request(app)
+            .post(`${baseURL}/users/login`)
+            .send({
+                email: "unique@gmail.com",
+                password: "secret",
+            })
+            .end((err, res) => {
+                chai.request(app)
+                .post(`${baseURL}/users/contacts`)
+                .set('Authorization', res.body.token)
+                .send({
+                    email: "newcontact@gmail.com",
+                    name: "jhon",
+                    phoneNumber: "+1 989898",
+                    weirdProp: "something bad",
+                }).end((err, res) => {
+                    res.should.have.status(httpStatus.BAD_REQUEST);              
+                  done();
+                });
+            })
+      });
+   });
+
 });
