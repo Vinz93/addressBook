@@ -1,7 +1,11 @@
 {
   "extends": "airbnb",
   "parser": "babel-eslint",
+  "plugins": [
+    "mocha"
+  ],
   "rules": {
+    "mocha/no-exclusive-tests": "error",
     "strict": 0,
     "consistent-return": 0,
     "no-shadow": 0,
@@ -25,6 +29,7 @@
     "import/no-unresolved": 0
   },
    "env": {
-		"node": true
+    "node": true,
+    "mocha": true
 	}
 }
