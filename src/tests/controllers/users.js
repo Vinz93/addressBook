@@ -160,7 +160,6 @@ describe('User Controller', () => {
               password: "secret",
             })
             .end((err, res) => {
-              console.log("succesfull login")
               chai.request(app)
                 .post(`${baseURL}/users/contacts`)
                 .set('Authorization', res.body.token)
@@ -170,7 +169,6 @@ describe('User Controller', () => {
                   phoneNumber: "+1 989898",
                 })
                 .end((err, res) => {
-                  console.log("add contact",res)
                   res.should.have.status(httpStatus.CREATED);
                   done();
                 });

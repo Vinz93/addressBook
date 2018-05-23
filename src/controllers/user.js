@@ -233,13 +233,10 @@ const UserController = {
   addContact(req, res) {
     const { id } = res.locals.user;
     const userRef = db.ref("contacs").child(id);
-    console.log("add contact controller");
     userRef.push(req.body, (err) => {
       if (err) {
-        console.log("error firebase", err);
         throw new APIError('Firebase problem', httpStatus.INTERNAL_SERVER_ERROR);
       } else {
-        console.log("good");
         return res.status(httpStatus.CREATED).end();
       }
     });
