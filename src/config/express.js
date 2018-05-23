@@ -9,10 +9,9 @@ import swaggerTools from 'swagger-tools';
 
 import errorMessages from '../services/middlewares/error_messages';
 import errorResponse from '../services/middlewares/error_response';
-import config from './env';
+import { appConfig } from './variables';
 import routes from '../routes';
 
-const { appConfig } = config;
 const app = express();
 const spec = swaggerDoc({
   swaggerDefinition: {
@@ -32,7 +31,7 @@ const spec = swaggerDoc({
 app.disable('x-powered-by');
 app.use(methodOverride('X-HTTP-Method-Override'));
 
-if (config.appConfig.env === 'development' || config.appConfig.env === 'testing') {
+if (appConfig.env === 'development') {
   app.use(morgan('dev'));
   app.use(bodyParser.urlencoded({
     extended: true,
@@ -56,6 +55,6 @@ swaggerTools.initializeMiddleware(spec, (middleware) => {
 app.use(errorMessages);
 app.use(errorResponse);
 
-app.locals.config = config.appConfig;
+app.locals.config = appConfig;
 
 export default app;

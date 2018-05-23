@@ -3,11 +3,11 @@ import chaiHttp from 'chai-http';
 import httpStatus from 'http-status';
 import mongoose from 'mongoose';
 
-import config from '../../config/env';
+import { appConfig } from '../../config/variables';
 import User from '../../models/user';
 import app from '../../index';
 
-const { path, basePath } = config.appConfig;
+const { path, basePath } = appConfig;
 const baseURL = `${basePath}${path}`;
 
 mongoose.Promise = Promise;
@@ -160,6 +160,7 @@ describe('User Controller', () => {
               password: "secret",
             })
             .end((err, res) => {
+              console.log("succesfull login")
               chai.request(app)
                 .post(`${baseURL}/users/contacts`)
                 .set('Authorization', res.body.token)
@@ -169,6 +170,7 @@ describe('User Controller', () => {
                   phoneNumber: "+1 989898",
                 })
                 .end((err, res) => {
+                  console.log("add contact",res)
                   res.should.have.status(httpStatus.CREATED);
                   done();
                 });

@@ -2,13 +2,13 @@ import mongoose from 'mongoose';
 import Promise from 'bluebird';
 
 import app from './config/express';
-import config from './config/env';
+import { appConfig, dbConfig } from './config/variables';
 
 import 'babel-core/register';
 import 'babel-polyfill';
 
 mongoose.Promise = Promise;
-const { port, path, host, env, publicPort, basePath } = config.appConfig;
+const { port, path, host, env, publicPort, basePath } = appConfig;
 
 
 function listen() {
@@ -25,7 +25,7 @@ function connect() {
       },
     },
   };
-  return mongoose.connect(config.dbConfig.db, options).connection;
+  return mongoose.connect(dbConfig.db, options).connection;
 }
 
 connect()

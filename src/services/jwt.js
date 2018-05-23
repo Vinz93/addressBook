@@ -2,8 +2,8 @@ import jwt from 'jsonwebtoken';
 import httpStatus from 'http-status';
 
 import { APIError } from '../helpers/errors';
-import config from '../config/env';
-const { jwtKey } = config.constants;
+import { constants } from '../config/variables';
+const { jwtKey } = constants;
 
 export const createJwt = user => (
   jwt.sign({

@@ -3,7 +3,7 @@ import moment from 'moment';
 
 import { paginate } from '../helpers/utils';
 import { APIError } from '../helpers/errors';
-import config from '../config/env';
+import { constants } from '../config/variables';
 import db from '../config/firebase_admin';
 import { createJwt, verifyJwt } from '../services/jwt';
 import User from '../models/user';
@@ -158,7 +158,7 @@ const UserController = {
   },
 
   async validate(req, res, next) {
-    const { expTime } = config.constants;
+    const { expTime } = constants;
     const token = req.get('Authorization');
     const { user, date } = await verifyJwt(token);
     const expirationtime = moment(date).add(expTime, 'hours');
@@ -233,10 +233,13 @@ const UserController = {
   addContact(req, res) {
     const { id } = res.locals.user;
     const userRef = db.ref("contacs").child(id);
+    console.log("add contact controller");
     userRef.push(req.body, (err) => {
       if (err) {
+        console.log("error firebase", err);
         throw new APIError('Firebase problem', httpStatus.INTERNAL_SERVER_ERROR);
       } else {
+        console.log("good");
         return res.status(httpStatus.CREATED).end();
       }
     });

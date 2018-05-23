@@ -44,6 +44,7 @@
     "compression": "^1.6.2",
     "cors": "^2.7.1",
     "crypto": "0.0.3",
+    "dotenv": "^5.0.1",
     "express": "^4.13.4",
     "express-validation": "^1.0.1",
     "firebase-admin": "^5.12.0",
