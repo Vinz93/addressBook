@@ -1,4 +1,3 @@
-/* eslint-disable */
 import chai from 'chai';
 import Promise from 'bluebird';
 import mongoose from 'mongoose';
