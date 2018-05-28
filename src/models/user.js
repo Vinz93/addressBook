@@ -3,8 +3,7 @@ import validate from 'mongoose-validator';
 import paginate from 'mongoose-paginate';
 import uniqueValidator from 'mongoose-unique-validator';
 import fieldRemover from 'mongoose-field-remover';
-import crypto from 'crypto';
-
+import bcrypt from 'bcrypt-nodejs';
 const Schema = mongoose.Schema;
 
 /**
@@ -71,16 +70,25 @@ UserSchema.virtual('age').get(function () {
 });
 
 UserSchema.methods = {
-  authenticate(password) {
-    return crypto.createHash('md5').update(password).digest('hex') === this.password;
+  async authenticate(password) {
+   return new Promise((resolve, reject) => {
+     bcrypt.compare(password, this.password, (err, res) => {
+      if (err) {
+        reject(new APIError('bcrypt compare', httpStatus.INTERNAL_SERVER_ERROR));
+      } else {
+        resolve(res);
+      }
+     });
+   });
   },
 };
 
-UserSchema.pre('save', function (next) {
+UserSchema.pre('save', async function (next) {
   if (!this.isModified('password')) return next();
-
-  this.password = crypto.createHash('md5').update(this.password).digest('hex');
-  next();
+  bcrypt.hash(this.password, null, null, (err, hash) => {
+    this.password = hash;
+    next();
+  });
 });
 
 UserSchema.plugin(fieldRemover, 'password __v');
