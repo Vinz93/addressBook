@@ -3,7 +3,7 @@ import validate from 'mongoose-validator';
 import paginate from 'mongoose-paginate';
 import uniqueValidator from 'mongoose-unique-validator';
 import fieldRemover from 'mongoose-field-remover';
-import bcrypt from 'bcrypt-nodejs';
+import bcrypt from 'bcrypt';
 const Schema = mongoose.Schema;
 
 /**
@@ -85,9 +85,12 @@ UserSchema.methods = {
 
 UserSchema.pre('save', async function (next) {
   if (!this.isModified('password')) return next();
-  bcrypt.hash(this.password, null, null, (err, hash) => {
+  bcrypt.hash(this.password, 10).then(hash => {
     this.password = hash;
     next();
+  })
+  .catch(err => {
+    throw new APIError('bycript hash', httpStatus.INTERNAL_SERVER_ERROR);
   });
 });
 
